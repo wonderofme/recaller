@@ -12,7 +12,7 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                 </svg>
               </div>
-              <span className="text-xl font-bold text-gray-900">Recall Alert</span>
+              <span className="text-xl font-bold text-gray-900">Wonder of Recall</span>
             </Link>
           </div>
           
@@ -32,7 +32,7 @@ export default function Header() {
             <div className="text-sm text-gray-500">
               Last updated: <span id="last-updated">Loading...</span>
               <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                Auto-updates hourly
+                Auto-updates daily
               </span>
             </div>
           </div>

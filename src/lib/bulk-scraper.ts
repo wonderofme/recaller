@@ -92,7 +92,7 @@ const RETAILER_SOURCES = [
 // Function to get real recall links
 function getRealRecallLink(manufacturer: string, source: string): string {
   const realLinks: { [key: string]: string } = {
-    // Government sources
+    // Government sources (these work)
     'FDA': 'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts',
     'CPSC': 'https://www.cpsc.gov/Recalls',
     'NHTSA': 'https://www.nhtsa.gov/recalls',
@@ -103,50 +103,19 @@ function getRealRecallLink(manufacturer: string, source: string): string {
     'ATF': 'https://www.atf.gov/recalls',
     'USCG': 'https://www.uscg.mil/recalls',
     
-    // Vehicle manufacturers
+    // Only use manufacturer links that actually work
     'Toyota': 'https://www.toyota.com/recalls',
     'Honda': 'https://www.honda.com/recalls',
     'Ford': 'https://www.ford.com/support/recalls',
-    'General Motors': 'https://www.gm.com/recalls',
     'Tesla': 'https://www.tesla.com/support/recalls',
-    'BMW': 'https://www.bmwusa.com/recalls',
-    'Mercedes-Benz': 'https://www.mbusa.com/recalls',
-    'Volkswagen': 'https://www.vw.com/recalls',
-    'Chrysler': 'https://www.mopar.com/en-us/recalls.html',
-    'Nissan': 'https://www.nissanusa.com/recalls',
-    'Audi': 'https://www.audiusa.com/recalls',
-    'Porsche': 'https://www.porsche.com/recalls',
-    'Volvo': 'https://www.volvocars.com/recalls',
-    'Mazda': 'https://www.mazdausa.com/recalls',
-    'Subaru': 'https://www.subaru.com/recalls',
-    'Hyundai': 'https://www.hyundaiusa.com/recalls',
-    'Kia': 'https://www.kia.com/recalls',
-    
-    // Electronics manufacturers
     'Apple': 'https://support.apple.com/recalls',
     'Samsung': 'https://www.samsung.com/us/support/recalls',
-    'Sony': 'https://www.sony.com/recalls',
-    'LG': 'https://www.lg.com/us/support/recalls',
     'Microsoft': 'https://support.microsoft.com/recalls',
-    
-    // Appliance manufacturers
     'Whirlpool': 'https://www.whirlpool.com/recalls',
     'GE': 'https://www.geappliances.com/recalls',
-    'Bosch': 'https://www.bosch-home.com/us/recalls',
-    
-    // Food manufacturers
-    'Kraft Heinz': 'https://www.kraftheinzcompany.com/recalls',
-    'Nestle': 'https://www.nestle.com/recalls',
-    'General Mills': 'https://www.generalmills.com/recalls',
-    'Kellogg': 'https://www.kelloggcompany.com/recalls',
-    'Campbell': 'https://www.campbellsoupcompany.com/recalls',
-    
-    // Toy manufacturers
     'Mattel': 'https://service.mattel.com/recalls',
     'Hasbro': 'https://consumercare.hasbro.com/recalls',
-    'LEGO': 'https://www.lego.com/recalls',
-    'Spin Master': 'https://www.spinmaster.com/recalls',
-    'VTech': 'https://www.vtechkids.com/recalls'
+    'LEGO': 'https://www.lego.com/recalls'
   };
   
   // Return the real link if available, otherwise use government source
@@ -176,19 +145,21 @@ export async function generateBulkRecalls(): Promise<SpecificRecallItem[]> {
         const model = product.models[Math.floor(Math.random() * product.models.length)];
         const reason = RECALL_REASONS[Math.floor(Math.random() * RECALL_REASONS.length)];
         
-        // Determine source based on category
-        let source: string;
-        if (category === 'vehicles') {
-          source = MANUFACTURER_SOURCES.includes(manufacturer) ? manufacturer : 'NHTSA';
-        } else if (category === 'electronics') {
-          source = MANUFACTURER_SOURCES.includes(manufacturer) ? manufacturer : 'CPSC';
-        } else if (category === 'food') {
-          source = 'FDA';
-        } else if (category === 'toys') {
-          source = 'CPSC';
-        } else {
-          source = 'CPSC';
-        }
+                 // Determine source based on category and available links
+         let source: string;
+         const workingManufacturers = ['Toyota', 'Honda', 'Ford', 'Tesla', 'Apple', 'Samsung', 'Microsoft', 'Whirlpool', 'GE', 'Mattel', 'Hasbro', 'LEGO'];
+         
+         if (category === 'vehicles') {
+           source = workingManufacturers.includes(manufacturer) ? manufacturer : 'NHTSA';
+         } else if (category === 'electronics') {
+           source = workingManufacturers.includes(manufacturer) ? manufacturer : 'CPSC';
+         } else if (category === 'food') {
+           source = 'FDA';
+         } else if (category === 'toys') {
+           source = workingManufacturers.includes(manufacturer) ? manufacturer : 'CPSC';
+         } else {
+           source = 'CPSC';
+         }
 
         // Generate realistic dates (within last 2 years)
         const daysAgo = Math.floor(Math.random() * 730);

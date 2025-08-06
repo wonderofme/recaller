@@ -12,7 +12,8 @@
     "research-alternatives": "tsx scripts/research-alternatives.ts",
     "scrape-feeds": "tsx scripts/scrape-feeds.ts",
     "analyze-sites": "tsx scripts/analyze-sites.ts",
-    "scrape-specific": "tsx scripts/scrape-specific.ts"
+    "scrape-specific": "tsx scripts/scrape-specific.ts",
+    "generate-bulk": "tsx scripts/generate-bulk.ts"
   },
   "dependencies": {
     "@types/node-fetch": "^2.6.13",

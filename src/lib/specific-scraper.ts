@@ -38,7 +38,7 @@ export const SPECIFIC_SCRAPING_SOURCES = [
             links.push(href);
           }
         });
-        return [...new Set(links)].slice(0, 5); // Remove duplicates, limit to 5
+        return [...new Set(links)].slice(0, 15); // Remove duplicates, limit to 15
       });
     },
     extractRecallDetails: ($: any, url: string) => {
@@ -1688,6 +1688,263 @@ export const SPECIFIC_SCRAPING_SOURCES = [
         link: url
       };
     }
+  },
+  // Additional sources for more recalls
+  {
+    name: 'General Motors',
+    baseUrl: 'https://www.gm.com/recalls',
+    category: 'Vehicles',
+    findRecallLinks: async (page: any) => {
+      return await page.evaluate(() => {
+        const links: string[] = [];
+        document.querySelectorAll('a').forEach(link => {
+          const href = (link as HTMLAnchorElement).href;
+          const text = (link as HTMLAnchorElement).textContent?.toLowerCase() || '';
+          
+          if (href && 
+              (href.includes('/recall/') || 
+               href.includes('/safety/') || 
+               text.includes('recall') ||
+               text.includes('safety') ||
+               text.includes('vehicle'))) {
+            links.push(href);
+          }
+        });
+        return [...new Set(links)].slice(0, 10);
+      });
+    },
+    extractRecallDetails: ($: any, url: string) => {
+      const title = $('h1, h2, h3').first().text().trim();
+      const allText = $('body').text();
+      const paragraphs = $('p').map((i: number, el: any) => $(el).text().trim()).get();
+      
+      const recallParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('recall') || 
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('vehicle') ||
+        p.toLowerCase().includes('gm')
+      );
+      
+      const description = recallParagraphs[0] || paragraphs[0] || '';
+      
+      let productName = $('strong:contains("Vehicle"), b:contains("Vehicle")').first().text().trim();
+      if (!productName) {
+        const vehicleMatch = allText.match(/(\d{4}[-\s]\w+[-\s]\w+)/i);
+        productName = vehicleMatch ? vehicleMatch[1] : '';
+      }
+      
+      let manufacturer = 'General Motors';
+      
+      let recallReason = '';
+      const reasonParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('because') || 
+        p.toLowerCase().includes('reason') ||
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('defect')
+      );
+      recallReason = reasonParagraphs[0] || '';
+      
+      return {
+        title: title || 'GM Vehicle Recall',
+        description,
+        productName,
+        recallReason,
+        manufacturer,
+        link: url
+      };
+    }
+  },
+  {
+    name: 'Ford',
+    baseUrl: 'https://www.ford.com/support/recalls',
+    category: 'Vehicles',
+    findRecallLinks: async (page: any) => {
+      return await page.evaluate(() => {
+        const links: string[] = [];
+        document.querySelectorAll('a').forEach(link => {
+          const href = (link as HTMLAnchorElement).href;
+          const text = (link as HTMLAnchorElement).textContent?.toLowerCase() || '';
+          
+          if (href && 
+              (href.includes('/recall/') || 
+               href.includes('/safety/') || 
+               text.includes('recall') ||
+               text.includes('safety') ||
+               text.includes('vehicle'))) {
+            links.push(href);
+          }
+        });
+        return [...new Set(links)].slice(0, 10);
+      });
+    },
+    extractRecallDetails: ($: any, url: string) => {
+      const title = $('h1, h2, h3').first().text().trim();
+      const allText = $('body').text();
+      const paragraphs = $('p').map((i: number, el: any) => $(el).text().trim()).get();
+      
+      const recallParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('recall') || 
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('vehicle') ||
+        p.toLowerCase().includes('ford')
+      );
+      
+      const description = recallParagraphs[0] || paragraphs[0] || '';
+      
+      let productName = $('strong:contains("Vehicle"), b:contains("Vehicle")').first().text().trim();
+      if (!productName) {
+        const vehicleMatch = allText.match(/(\d{4}[-\s]\w+[-\s]\w+)/i);
+        productName = vehicleMatch ? vehicleMatch[1] : '';
+      }
+      
+      let manufacturer = 'Ford';
+      
+      let recallReason = '';
+      const reasonParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('because') || 
+        p.toLowerCase().includes('reason') ||
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('defect')
+      );
+      recallReason = reasonParagraphs[0] || '';
+      
+      return {
+        title: title || 'Ford Vehicle Recall',
+        description,
+        productName,
+        recallReason,
+        manufacturer,
+        link: url
+      };
+    }
+  },
+  {
+    name: 'Chrysler',
+    baseUrl: 'https://www.mopar.com/en-us/recalls.html',
+    category: 'Vehicles',
+    findRecallLinks: async (page: any) => {
+      return await page.evaluate(() => {
+        const links: string[] = [];
+        document.querySelectorAll('a').forEach(link => {
+          const href = (link as HTMLAnchorElement).href;
+          const text = (link as HTMLAnchorElement).textContent?.toLowerCase() || '';
+          
+          if (href && 
+              (href.includes('/recall/') || 
+               href.includes('/safety/') || 
+               text.includes('recall') ||
+               text.includes('safety') ||
+               text.includes('vehicle'))) {
+            links.push(href);
+          }
+        });
+        return [...new Set(links)].slice(0, 10);
+      });
+    },
+    extractRecallDetails: ($: any, url: string) => {
+      const title = $('h1, h2, h3').first().text().trim();
+      const allText = $('body').text();
+      const paragraphs = $('p').map((i: number, el: any) => $(el).text().trim()).get();
+      
+      const recallParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('recall') || 
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('vehicle') ||
+        p.toLowerCase().includes('chrysler')
+      );
+      
+      const description = recallParagraphs[0] || paragraphs[0] || '';
+      
+      let productName = $('strong:contains("Vehicle"), b:contains("Vehicle")').first().text().trim();
+      if (!productName) {
+        const vehicleMatch = allText.match(/(\d{4}[-\s]\w+[-\s]\w+)/i);
+        productName = vehicleMatch ? vehicleMatch[1] : '';
+      }
+      
+      let manufacturer = 'Chrysler';
+      
+      let recallReason = '';
+      const reasonParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('because') || 
+        p.toLowerCase().includes('reason') ||
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('defect')
+      );
+      recallReason = reasonParagraphs[0] || '';
+      
+      return {
+        title: title || 'Chrysler Vehicle Recall',
+        description,
+        productName,
+        recallReason,
+        manufacturer,
+        link: url
+      };
+    }
+  },
+  {
+    name: 'Volkswagen',
+    baseUrl: 'https://www.vw.com/recalls',
+    category: 'Vehicles',
+    findRecallLinks: async (page: any) => {
+      return await page.evaluate(() => {
+        const links: string[] = [];
+        document.querySelectorAll('a').forEach(link => {
+          const href = (link as HTMLAnchorElement).href;
+          const text = (link as HTMLAnchorElement).textContent?.toLowerCase() || '';
+          
+          if (href && 
+              (href.includes('/recall/') || 
+               href.includes('/safety/') || 
+               text.includes('recall') ||
+               text.includes('safety') ||
+               text.includes('vehicle'))) {
+            links.push(href);
+          }
+        });
+        return [...new Set(links)].slice(0, 10);
+      });
+    },
+    extractRecallDetails: ($: any, url: string) => {
+      const title = $('h1, h2, h3').first().text().trim();
+      const allText = $('body').text();
+      const paragraphs = $('p').map((i: number, el: any) => $(el).text().trim()).get();
+      
+      const recallParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('recall') || 
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('vehicle') ||
+        p.toLowerCase().includes('volkswagen')
+      );
+      
+      const description = recallParagraphs[0] || paragraphs[0] || '';
+      
+      let productName = $('strong:contains("Vehicle"), b:contains("Vehicle")').first().text().trim();
+      if (!productName) {
+        const vehicleMatch = allText.match(/(\d{4}[-\s]\w+[-\s]\w+)/i);
+        productName = vehicleMatch ? vehicleMatch[1] : '';
+      }
+      
+      let manufacturer = 'Volkswagen';
+      
+      let recallReason = '';
+      const reasonParagraphs = paragraphs.filter((p: string) => 
+        p.toLowerCase().includes('because') || 
+        p.toLowerCase().includes('reason') ||
+        p.toLowerCase().includes('safety') ||
+        p.toLowerCase().includes('defect')
+      );
+      recallReason = reasonParagraphs[0] || '';
+      
+      return {
+        title: title || 'Volkswagen Vehicle Recall',
+        description,
+        productName,
+        recallReason,
+        manufacturer,
+        link: url
+      };
+    }
   }
 ];
 
@@ -1728,13 +1985,13 @@ export async function scrapeSpecificRecalls(): Promise<SpecificRecallItem[]> {
           
           const details = source.extractRecallDetails($, recallUrl);
           
-                     // Accept more content for SEO - focus on quantity and searchable terms
-           if (details.title && 
-               details.title.length > 5 && 
-               !details.title.toLowerCase().includes('robot or human') &&
-               !details.title.toLowerCase().includes('javascript:void') &&
-               !details.title.toLowerCase().includes('page not found') &&
-               details.description.length > 20) {
+                                    // Very lenient filtering for maximum SEO content
+               if (details.title && 
+                   details.title.length > 3 && 
+                   !details.title.toLowerCase().includes('robot or human') &&
+                   !details.title.toLowerCase().includes('javascript:void') &&
+                   !details.title.toLowerCase().includes('page not found') &&
+                   details.description.length > 10) {
             allRecalls.push({
               id: `${source.name.toLowerCase()}-specific-${Date.now()}-${i}`,
               title: details.title,
@@ -1762,4 +2019,4 @@ export async function scrapeSpecificRecalls(): Promise<SpecificRecallItem[]> {
   }
   
   return allRecalls.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-} 
+}
